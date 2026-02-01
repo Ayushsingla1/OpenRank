@@ -13,10 +13,10 @@ Current supported games:
 ## Links
 
 - [Demo Video](#)
+- [Architecture](https://www.notion.so/2faba4f18c8280118585c7c1ab7d5f54)
 - [Main Contract](https://stellar.expert/explorer/testnet/contract/CBRUJZHOXKMCKVPMJ3PMXKUB6JVAF2BOKIWXIJ4K62US3LTBFPO47RE6)
 - [USDg SAC Contract](https://stellar.expert/explorer/testnet/contract/CAVN7O3AZXY4FUHBG6JCNFRE3COPDBEWOKHA7MSEXPNLLZ7T4NZEZZ7X)
 - [Screenshots]
--  [Landing page](#)
 -  ![HomePage](https://drive.google.com/uc?export=view&id=16IfZ6zWx3ULvEpG3mu6tLCdu-wm5Mm3H)
 -  ![TypingPage](https://drive.google.com/uc?export=view&id=1xLNRjrmMx0Hsl9Ms5zKSEUvTwr6sgi_u)
 -  ![TransactionPage](https://drive.google.com/uc?export=view&id=1fGJ4I4cpJjU3gI9qghej24QYm-AK9XNz)
