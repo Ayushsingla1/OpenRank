@@ -143,7 +143,7 @@ export default function ProfilePage() {
                 <div className="w-8 h-8 bg-gradient-to-br from-primary to-chart-2 rounded-lg flex items-center justify-center">
                   <Gamepad2 className="w-5 h-5 text-primary-foreground" />
                 </div>
-                <span className="text-2xl font-bold text-glow">GridLock</span>
+                <span className="text-2xl font-bold text-glow">openRank</span>
               </div>
             </div>
             <div className="flex items-center space-x-4">

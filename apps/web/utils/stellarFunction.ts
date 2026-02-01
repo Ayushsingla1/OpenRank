@@ -2,7 +2,7 @@
 //import {
 //  isConnected,
 //} from "@stellar/freighter-api";
-import { gridlockContractAddress, rpcUrl } from "../constants/constants";
+import { openRankContractAddress, rpcUrl } from "../constants/constants";
 import * as StellarSdk from "@stellar/stellar-sdk";
 
 //export const getUserBet = () => {
@@ -36,7 +36,7 @@ export async function invokeViewContract({
   })
     .addOperation(
       StellarSdk.Operation.invokeContractFunction({
-        contract: gridlockContractAddress,
+        contract: openRankContractAddress,
         function: functionName,
         args,
       })

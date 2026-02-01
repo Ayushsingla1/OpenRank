@@ -63,7 +63,7 @@ const BettingPanel = ({
   }, [betYes]);
 
   const getPrice = async (gameId: string, amount: number, betYes: boolean) => {
-    // console.log(gameId, amount , betYes);
+    console.log("gameId: ", gameId, "amt: ", amount , "betYes: ",betYes);
     const res = await getAmount(gameId, amount, betYes ? 1 : 0);
 
     if(!res?.success){
@@ -79,6 +79,7 @@ const BettingPanel = ({
   const getEstAmt = async (e: React.ChangeEvent<HTMLInputElement>) => {
     // getPrice(gameId, betShares, betYes)
     setBetShares(parseInt(e.target.value));
+    console.log("shares", e.target.value, " betyes: ", betYes);
     getPrice(gameId, parseInt(e.target.value), betYes);
   };
 
@@ -100,44 +101,42 @@ const BettingPanel = ({
     }
 
     const result = await getAllowance();
-    console.log(result)
+    console.log("allowance amount is : ", result)
     console.log("amount: ", parseInt(result.amount?.toString()!))
-
-    if(!result.success){
+    
+    if(!result.success || result.amount === undefined){
       console.error("err while getting the allowance");
-      return;
+      return {success : false};
     }
-
-    const approveAmount = parseInt(result.toString());
-
-    console.log(result);
-
+    
     const price = await getPrice(gameId, betShares, betYes);
-    const finalPrice = Math.ceil(price / 10 ** 6);
+    const finalPrice = BigInt(String(price)) * BigInt(String(10**7));
+    console.log("amount needed is : ", finalPrice);
 
-    console.log(finalPrice);
-
-    if (approveAmount > finalPrice) {
-      await buy(finalPrice);
-    } else {
+    if(finalPrice > result.amount!){
+      console.log("need to go for approval");
       const allowResult = await getApproval(BigInt(finalPrice.toString()));
-
       if(!allowResult.success){
         console.error("error while getting approval")
-        return;
+        return {success : false};
       }
-
-      if (allowResult.success) await buy(finalPrice);
     }
+    const response = await buy(finalPrice!);
+    console.log(response);
+    if(response?.success) {
+      return {success : true};
+    }
+    return {success : false};
   };
 
-  const buy = async (price: number) => {
+  const buy = async (price: bigint) => {
     const bet = betYes === true;
     console.log(price);
     const res = await stakeAmount(gameId, betShares, bet ? 1:0, address, price);
-
+    console.log("inside of stake amount : " ,  res);
     if(!res.success){
       console.error("err while staking!");
+      return {success : false};
     }
 
     if (res.success) {
@@ -150,10 +149,15 @@ const BettingPanel = ({
         // userId : user
       });
 
-      if (_dbConfirmation.data.success) alert("success");
-      else alert("fail");
-    } else alert("fail");
-  };
+      if (_dbConfirmation.data.success) {
+        alert("success");
+        return {success : true};
+      }
+      else {
+        return {success : false};
+      }
+  }
+}
 
   return (
     <motion.div
@@ -203,7 +207,7 @@ const BettingPanel = ({
             <input
               id="amount"
               type="number"
-              value={estAmt}
+              value={estAmt as number / (10 ** 7)}
               onChange={getEstAmt}
               placeholder="100"
               className="w-full bg-slate-900/70 border border-slate-700 rounded-lg py-2 pl-10 pr-4 text-slate-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
@@ -258,7 +262,7 @@ const BettingPanel = ({
         </div>
         <span className="text-xl font-bold text-amber-400 font-mono">
           {gameContractDetails
-            ? `$${parseInt(gameContractDetails[6]) / 10 ** 6}`
+            ? `$${parseInt(gameContractDetails[6])}`
             : "$31,000"}
         </span>
       </div>

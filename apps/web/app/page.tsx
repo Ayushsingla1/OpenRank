@@ -120,7 +120,7 @@ export default function HomePage() {
   const testimonials = [
     {
       name: "@ayushsingla32",
-      text: "GridLock turned my boring Tuesday into an epic gaming session with my followers. This is the future!",
+      text: "OpenRank turned my boring Tuesday into an epic gaming session with my followers. This is the future!",
     },
     {
       name: "@Dev_Aggarwal03",
@@ -128,7 +128,7 @@ export default function HomePage() {
     },
     {
       name: "@startupfounder",
-      text: "My team uses GridLock for team building. Nothing beats beating your CEO in Speed Typing 😂",
+      text: "My team uses OpenRank for team building. Nothing beats beating your CEO in Speed Typing 😂",
     },
   ];
 
@@ -458,7 +458,7 @@ export default function HomePage() {
               We're the First in This Space
             </h2>
             <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-              GridLock is pioneering a completely new category of social gaming.
+              OpenRank is pioneering a completely new category of social gaming.
               No one has ever connected social media followers with competitive
               gaming and live spectating. You're witnessing the birth of social
               esports.
@@ -497,10 +497,10 @@ export default function HomePage() {
               <div className="w-8 h-8 bg-gradient-to-br from-primary to-chart-2 rounded-lg flex items-center justify-center">
                 <Gamepad2 className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold text-glow">GridLock</span>
+              <span className="text-xl font-bold text-glow">OpenRank</span>
             </div>
             <p className="text-muted-foreground">
-              © 2024 GridLock. The future of social gaming.
+              © 2024 OpenRank. The future of social gaming.
             </p>
           </div>
         </div>

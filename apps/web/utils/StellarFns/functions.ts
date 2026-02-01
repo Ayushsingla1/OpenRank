@@ -7,7 +7,7 @@ import axios from "axios";
 
 const rpcUrl = "https://soroban-testnet.stellar.org";
 const contractAddress =
-  "CDOI6BF4UT2DGZIDTQBLBLHL7Y6NVFO7JPPCYIW7ENO2JX7YLUROB2EP";
+  "CBRUJZHOXKMCKVPMJ3PMXKUB6JVAF2BOKIWXIJ4K62US3LTBFPO47RE6";
 const signTransactionXDR = async (xdr: string, address: string) => {
   try {
     const signedXDR = await signTransaction(xdr, {
@@ -41,11 +41,11 @@ const signTransactionXDR = async (xdr: string, address: string) => {
   }
 };
 
-export const getApproval = async (amount: bigint) => {
+export const getApproval = async (amount: bigint) : Promise<{success : boolean}> => {
   const address = localStorage.getItem("WALLET_ADDRESS");
   if(!address) {
       console.log("address not found");
-      return;
+      return {success : false};
     }
   const contract = new USDClient.Client({
     rpcUrl: rpcUrl,
@@ -81,7 +81,7 @@ export const getAmount = async (game_id: string, shares: number, bet: number) =>
     const { result: amount } = await contract.get_amount({
       game_id: game_id,
       bet: bet,
-      shares: BigInt(String(shares)),
+      shares: BigInt(String(shares)) * BigInt(10 ** 7),
     });
     console.log("amount from getAmount is :" , amount);
       if(amount.isOk()){
@@ -110,13 +110,14 @@ export const tx = async (game_id: string, shares: number, bet: number) => {
   });
 
   const getAmountResult = await getAmount(game_id, shares, bet);
-  console.log(getAmountResult);
+  console.log("amount needed :", getAmountResult);
 
   if (!getAmountResult?.success) {
     console.log("unable to fetch amount");
     return { success: false };
   }
 
+  console.log("calling to get approval");
   const allowance = await getApproval(getAmountResult.amount!);
   console.log(allowance);
   if (!allowance.success) {
@@ -125,9 +126,9 @@ export const tx = async (game_id: string, shares: number, bet: number) => {
 
   const assembledTx = await contract.stake_amount({
     game_id: game_id,
-    shares: BigInt(String(shares)),
+    shares: BigInt(String(shares)) * BigInt(String(10 ** 7)),
     bet: bet,
-    amount: getAmountResult.amount!,
+    amount: getAmountResult.amount! ,
     staker: address,
   });
 
@@ -137,7 +138,7 @@ export const tx = async (game_id: string, shares: number, bet: number) => {
   return res;
 }
 
-export const stakeAmount = async (game_id: string, shares: number, bet: number, address: string, amount: number) => {
+export const stakeAmount = async (game_id: string, shares: number, bet: number, address: string, amount: bigint) => {
   const contract = new Client.Client({
     rpcUrl: rpcUrl,
     publicKey: address,
@@ -145,16 +146,15 @@ export const stakeAmount = async (game_id: string, shares: number, bet: number, 
   });
   const tx = await contract.stake_amount({
     game_id: game_id,
-    shares: BigInt(String(shares)),
+    shares: BigInt(String(shares)) * BigInt(10 ** 7),
     bet: bet,
-    amount: BigInt(amount),
+    amount: amount,
     staker: address,
   });
 
-  if(tx.result.isOk()){
-      return {success:true, response: tx.result.unwrap()};
-  }
-  else return {success: false}
+  const xdr = tx.toXDR();
+  const result = await signTransactionXDR(xdr,address);
+  return result;
 }
 
 export const getGame = async (game_id: string) : Promise<{

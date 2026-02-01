@@ -1,9 +1,9 @@
-# GridLock — Challenge Your X Followers on U2U Solaris
+# OpenRank — Challenge Your X Followers on U2U Solaris
 
  <!-- IMAGE: Hero / Banner -->
  <!-- Add a catchy product image or GIF showcasing a challenge flow -->
 
-GridLock is a social wagering platform where creators challenge their X (Twitter) followers, and the community stakes on outcomes. It’s powered by smart contracts on the U2U Solaris mainnet and built as a modern Turborepo monorepo.
+OpenRank is a social wagering platform where creators challenge their X (Twitter) followers, and the community stakes on outcomes. It’s powered by smart contracts on the U2U Solaris mainnet and built as a modern Turborepo monorepo.
 
 - **Challenge your followers** with custom prompts and deadlines.
 - **Stake on outcomes** and let the market decide confidence.
@@ -30,7 +30,7 @@ GridLock is a social wagering platform where creators challenge their X (Twitter
 
 ## Overview
 
-GridLock lets creators spin up on-chain challenges that their X followers can participate in. Others can stake on whether a creator will complete the challenge. Results are announced and settled trustlessly.
+OpenRank lets creators spin up on-chain challenges that their X followers can participate in. Others can stake on whether a creator will complete the challenge. Results are announced and settled trustlessly.
 
  <!-- IMAGE: Overview Diagram -->
  <!-- Add a high-level overview image illustrating creator -> challenge -> staking -> result flow -->

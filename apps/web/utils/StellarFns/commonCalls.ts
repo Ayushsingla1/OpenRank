@@ -1,9 +1,9 @@
 import * as StellarSdk from "@stellar/stellar-sdk";
-import { gridlockContractAddress } from "../../constants/constants";
+import { openRankContractAddress } from "../../constants/constants";
 
 export const RPC_URL = "https://soroban-testnet.stellar.org";
 export const NETWORK = StellarSdk.Networks.TESTNET;
-export const CONTRACT_ID = gridlockContractAddress;
+export const CONTRACT_ID = openRankContractAddress;
 
 const server = new StellarSdk.rpc.Server(RPC_URL);
 

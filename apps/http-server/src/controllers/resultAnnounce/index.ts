@@ -10,7 +10,7 @@ const networkPassphrase = "Test SDF Network ; September 2015";
 const initialize = async () => {
   const { signTransaction } = basicNodeSigner(wallet, networkPassphrase);
   const client = await Client.from({
-    contractId: "CDOI6BF4UT2DGZIDTQBLBLHL7Y6NVFO7JPPCYIW7ENO2JX7YLUROB2EP",
+    contractId: "CBRUJZHOXKMCKVPMJ3PMXKUB6JVAF2BOKIWXIJ4K62US3LTBFPO47RE6",
     networkPassphrase,
     rpcUrl,
     publicKey: wallet.publicKey(),

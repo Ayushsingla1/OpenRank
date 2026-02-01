@@ -1,5 +1,6 @@
 import {
   allowAllModules,
+  FREIGHTER_ID,
   StellarWalletsKit,
   WalletNetwork,
   XBULL_ID,
@@ -8,7 +9,7 @@ import {
 const kit = new StellarWalletsKit({
   modules: allowAllModules(),
   network: WalletNetwork.TESTNET,
-  selectedWalletId: XBULL_ID,
+  selectedWalletId: FREIGHTER_ID,
 });
 
 export const signTransaction = kit.signTransaction.bind(kit);
