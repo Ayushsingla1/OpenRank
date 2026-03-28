@@ -1,129 +1,126 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Gamepad2 } from "lucide-react";
-import { motion } from "motion/react";
+import { Gamepad2, Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-// import { ConnectButton } from "@rainbow-me/rainbowkit";
-// import { useAccount } from "wagmi";
-import ConnectBtnStellar from "../../components/stellarUi/connectBtnStellar"
-import { getPublicKey, setWallet } from "@/stellarWallet";
+import ConnectBtnStellar from "../../components/stellarUi/connectBtnStellar";
 
 export default function Nav() {
   const router = useRouter();
-  const [walletAddress, setWalletAddress] = useState<`${string}` | undefined>(
-    undefined,
-  );
+  const [walletAddress, setWalletAddress] = useState<string | undefined>(undefined);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const address = localStorage.getItem('WALLET_ADDRESS') 
-    if(address?.length){
-      console.log("navAddr: ", address);
+    const address = localStorage.getItem('WALLET_ADDRESS');
+    if (address?.length) {
       setWalletAddress(address);
     }
-
-  }, [])
+  }, []);
 
   const { user, isLoaded, isSignedIn } = useUser();
-  const username = process.env.NEXT_PUBLIC_USERNAME;
 
-  useEffect(() => {
-    if (isSignedIn) {
-      if (!user) {
-        router.push("/");
-      } else {
-        console.log(user?.username);
-      }
-    }
-  }, [isLoaded, isSignedIn, user]);
+  const navLinks = [
+    { name: "Live Matches", href: "/scheduledMatches", show: true },
+    { name: "Challenges", href: "/game/myGames", show: !!user },
+    { name: "Games", href: "/game", show: true },
+    { name: "Profile", href: "/profile", show: !!user },
+    { name: "Redeem", href: "/redeem", show: !!walletAddress },
+  ];
 
   return (
-    <div>
-      <motion.nav
-        initial={{ y: -50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="border-b border-border/50 backdrop-blur-sm bg-background/80 sticky top-0 z-50"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div
-              className="flex items-center space-x-2 hover:cursor-pointer"
-              onClick={() => router.push("/")}
-            >
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-chart-2 rounded-lg flex items-center justify-center">
-                <Gamepad2 className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <span className="text-2xl font-bold text-glow">OpenRank</span>
+    <motion.nav
+      initial={{ y: -20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      className="glass-header sticky top-0 z-[100] w-full"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
+          <div
+            className="flex items-center space-x-3 hover:cursor-pointer group"
+            onClick={() => router.push("/")}
+          >
+            <div className="w-10 h-10 bg-gradient-to-br from-primary to-chart-2 rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform">
+              <Gamepad2 className="w-6 h-6 text-black" />
             </div>
-            <div className="flex items-center space-x-4">
-              {username && (
-                <Link href={"/scheduledMatches"}>
-                  <Button
-                    value="ghost"
-                    className="text-foreground bg-black hover:text-black"
-                  >
-                    Live Matches
-                  </Button>
-                </Link>
-              )}
-              {user && (
-                <Link href={"/game/myGames"}>
-                  <Button
-                    variant="ghost"
-                    className="text-foreground hover:text-black"
-                  >
-                    Challenges
-                  </Button>
-                </Link>
-              )}
-              <Link href={"/game"}>
+            <span className="text-2xl font-black tracking-tighter text-glow uppercase italic">OpenRank</span>
+          </div>
+
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center space-x-1">
+            {navLinks.filter(link => link.show).map((link) => (
+              <Link key={link.name} href={link.href}>
                 <Button
                   variant="ghost"
-                  className="text-foreground hover:text-black"
+                  className="text-sm font-bold uppercase tracking-widest hover:text-primary hover:bg-white/5 px-4"
                 >
-                  Games
+                  {link.name}
                 </Button>
               </Link>
-              {user ? (
-                <Link href={"/profile"}>
-                  <Button
-                    variant="ghost"
-                    className="text-foreground hover:text-black"
-                  >
-                    Profile
-                  </Button>
-                </Link>
-              ) : (
-                <Link href={"/auth"}>
-                  <Button
-                    variant="ghost"
-                    className="text-foreground hover:text-black"
-                  >
-                    SignUp
-                  </Button>
-                </Link>
-              )}
-              {walletAddress && (
-                <Link href={"/redeem"}>
-                  <Button
-                    variant="ghost"
-                    className="text-foreground hover:text-black"
-                  >
-                    Redeem
-                  </Button>
-                </Link>
-              )}
-              <ConnectBtnStellar/>
-            </div>
+            ))}
+            
+            <div className="h-6 w-[1px] bg-white/10 mx-4" />
+            
+            {!user && isLoaded && (
+              <Link href="/auth">
+                <Button variant="ghost" className="font-bold text-primary hover:bg-primary/10 mr-2">
+                  SIGN UP
+                </Button>
+              </Link>
+            )}
+            
+            <ConnectBtnStellar />
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden flex items-center gap-4">
+            <ConnectBtnStellar />
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 text-foreground"
+            >
+              {isMobileMenuOpen ? <X /> : <Menu />}
+            </button>
           </div>
         </div>
-      </motion.nav>
-    </div>
+      </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden glass border-t border-white/5 overflow-hidden"
+          >
+            <div className="px-4 pt-2 pb-6 space-y-1">
+              {navLinks.filter(link => link.show).map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-3 py-4 text-base font-black uppercase tracking-widest hover:text-primary border-b border-white/5"
+                >
+                  {link.name}
+                </Link>
+              ))}
+              {!user && (
+                <Link
+                  href="/auth"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-3 py-4 text-base font-black uppercase tracking-widest text-primary"
+                >
+                  Sign Up
+                </Link>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.nav>
   );
 }
-
-// line 8 and 63 are wrong change username to user
