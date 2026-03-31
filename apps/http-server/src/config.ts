@@ -9,4 +9,4 @@ export const accessSecret = process.env.ACCESS_SECRET;
 export const clientId = process.env.CLIENT_ID;
 export const clientSecret = process.env.CLIENT_SECRET;
 export const userToken = process.env.BREARER_TOKEN;
-export const gridlockUserId = process.env.GRIDLOCK_USERID;
+export const openRankUserId = process.env.OPENRANK_USERID;
